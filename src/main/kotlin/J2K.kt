@@ -18,8 +18,8 @@ fun main(args: Array<String>) {
     val kotlinParts = JsonParser(className).execute(jsonFile)
     if (args.size >= 3) {
         val outFile = File(args[2])
-        ClassGenerator(kotlinParts, outFile).execute()
+        ClassGenerator(kotlinParts, className, outFile).execute()
     } else {
-        ClassGenerator(kotlinParts).execute()
+        ClassGenerator(kotlinParts, className).execute()
     }
 }
