@@ -6,17 +6,18 @@ import com.nseki.parts.KClassType
 import com.nseki.parts.KProperty
 import java.io.File
 import java.io.FileInputStream
+import java.util.*
 
 class JsonParser(private val className: String) {
 
-    private val classList = mutableListOf<KClassType.KClass>()
+    private val classList = ArrayDeque<KClassType.KClass>()
 
     fun execute(json: String): List<KClassType.KClass> {
         val jsonReader = JsonReader.of(Buffer().writeUtf8(json)).apply {
             isLenient = true
         }
         readObject(jsonReader, className)
-        return classList
+        return classList.toList()
     }
 
     fun execute(file: File): List<KClassType.KClass> {
@@ -24,7 +25,7 @@ class JsonParser(private val className: String) {
             isLenient = true
         }
         readObject(jsonReader, className)
-        return classList
+        return classList.toList()
     }
 
     private fun readObject(
@@ -64,9 +65,10 @@ class JsonParser(private val className: String) {
         if (inner) {
             jsonReader.endObject()
         }
-        if (!hasClass(className)) {
-            classList += KClassType.KClass(className, classMembers)
+        if (hasClass(className)) {
+            return
         }
+        classList.addFirst(KClassType.KClass(className, classMembers))
     }
 
     private fun readArray(name: String, jsonReader: JsonReader): KClassType {

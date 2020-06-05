@@ -38,16 +38,16 @@ import kotlin.Long
 import kotlin.String
 import kotlin.collections.List
 
-data class User(
-  val id: Long,
-  val name: String
-)
-
-data class SampleClass(
+data class MyClass(
   val id: String,
   val users: List<User>,
   val arrowedType: List<Long>,
   val transactionFee: Double
+)
+
+data class User(
+  val id: Long,
+  val name: String
 )
 ```
 
